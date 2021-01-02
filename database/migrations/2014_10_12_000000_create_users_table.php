@@ -24,7 +24,8 @@ class CreateUsersTable extends Migration
             $table->string('last_name', 50);
             $table->string('address', 200);
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

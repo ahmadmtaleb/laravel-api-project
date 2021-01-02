@@ -44,7 +44,7 @@ class ItemsController extends Controller
         catch(Exception $e){
             return response()->json([
                 'success' => false,
-                // 'message' => $e->getMessage()
+                'message' => $e->getMessage()
             ]);
         }
     }
@@ -70,7 +70,7 @@ class ItemsController extends Controller
         catch(Exception $e){
             return response()->json([
                 'success' => false,
-                // 'message' => $e->getMessage()
+                'message' => $e->getMessage()
             ]);
         }
     }
@@ -118,7 +118,7 @@ class ItemsController extends Controller
         catch(Exception $e){
             return response()->json([
                 'success' => false,
-                // 'message' => $e->getMessage()
+                'message' => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
         }        
     }
@@ -150,7 +150,7 @@ class ItemsController extends Controller
     
                 return response()->json([
                     'success' => false,
-                    // 'message'=>$validator->errors()
+                    'message'=>$validator->errors()
                 ], Response::HTTP_UNAUTHORIZED); 
     
             }
@@ -172,7 +172,7 @@ class ItemsController extends Controller
         catch(Exception $e){
             return response()->json([
                 'success' => false,
-                // 'message' => $e->getMessage()
+                'message' => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
         }     
     }
@@ -202,7 +202,7 @@ class ItemsController extends Controller
         catch(Exception $e){
             return response()->json([
                 'success' => false,
-                // 'message' => $e->getMessage()
+                'message' => $e->getMessage()
             ]);
         }
     }

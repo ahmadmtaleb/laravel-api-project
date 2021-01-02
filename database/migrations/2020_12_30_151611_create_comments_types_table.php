@@ -16,7 +16,8 @@ class CreateCommentsTypesTable extends Migration
         Schema::create('comments_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('type_name');
-            $table->timestamps();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 
