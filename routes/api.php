@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ItemsController;
+
 
 
 /*
@@ -26,5 +28,16 @@ Route::post('login', [AuthController::class, 'login']);
 Route::group(['middleware' => 'auth.jwt'], function () {
  
     Route::post('logout', [AuthController::class, 'logout']);
+
+    Route::get('items', [ItemsController::class, 'index']);
+    Route::get('items/{id}', [ItemsController::class, 'show']);
+    Route::post('items/create', [ItemsController::class, 'store']);
+    Route::put('items/edit/{id}', [ItemsController::class, 'update']);
+    Route::delete('item/delete/{id}', [ItemsController::class, 'destroy']);
+
+
+
+
+
   
 });

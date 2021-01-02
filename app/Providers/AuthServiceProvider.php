@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Providers;
+use App\Models\User;
+use App\Models\Items;
+use App\Models\Comments;
+
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -25,6 +29,11 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('item-owner', function (User $user, Items $item) {
+            return $user->id === $item->user_id;
+        });
+        Gate::define('comment-owner', function (User $user, Comments $comment) {
+            return $user->id === $comment->user_id;
+        });
     }
 }
