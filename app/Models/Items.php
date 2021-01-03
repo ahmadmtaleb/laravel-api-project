@@ -34,7 +34,7 @@ class Items extends Model
     */
     public function comments()
     {
-        return $this->hasMany(Item_comments::class);
+        return $this->hasMany(Comments::class);
     }
 
     /*
@@ -42,7 +42,7 @@ class Items extends Model
     */
     public function images()
     {
-        return $this->hasMany(Item_images::class);
+        return $this->hasMany(Images::class);
     }
 
     /*

@@ -23,13 +23,18 @@ class CreateCommentsTable extends Migration
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             
-            $table->foreignId('comment_type_id')
-                    ->constrained('comments_types')
+            $table->foreignId('item_id')
+                    ->constrained('items')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
 
-                    $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-                    $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->foreignId('comments_type_id')
+                    ->constrained('comments_types')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
         });
     }
