@@ -36,12 +36,19 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::put('items/edit/{id}', [ItemsController::class, 'update']);
     Route::delete('items/delete/{id}', [ItemsController::class, 'destroy']);
 
+    // adding a new item with one image
+    Route::post('items/add-new-item', [ItemsController::class, 'addNewItem']);
+
+    // adding a new item with one image
+    Route::post('items/add-new-item-b', [ItemsController::class, 'addNewItem_b']);
+
     Route::get('images', [ImagesController::class, 'index']);
     Route::get('images/{id}', [ImagesController::class, 'show']);
     Route::post('images/upload', [ImagesController::class, 'store']);
     Route::put('images/edit/{id}', [ImagesController::class, 'update']);
     Route::delete('images/delete/{id}', [ImagesController::class, 'destroy']);
-
+    
+    Route::post('items/add-new-item', [ItemsController::class, 'addNewItem']);
 
 
 

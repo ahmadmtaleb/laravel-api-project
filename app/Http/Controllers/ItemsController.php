@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Items;
+use App\Models\Images;
+use App\Http\Controllers\ImagesController;
 use Exception;
 use JWTAuth;
 use Validator;
@@ -205,5 +207,62 @@ class ItemsController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    public function addNewItem(Request $request)
+    {
+        try{
+            $validator = Validator::make($request->all(), 
+                      [ 
+                      'name' => 'required|string|max:150',
+                      'description' => 'required|string|between:100,500',
+                      'price' => 'required|numeric',  
+                      'quantity' => 'required|integer', 
+                      'user_id' => 'required|in:'.\Auth::user()->id,
+                      'file' => 'required|image|mimes:jpeg,png,jpg,svg|max:2048',
+                        
+                     ]);  
+ 
+            if ($validator->fails()) {  
+    
+                return response()->json([
+                    'success' => false,
+                    'message'=>$validator->errors()
+                ], Response::HTTP_UNAUTHORIZED); 
+    
+            }
+            $item = DB::table('items')->insertGetID(
+                [
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'price' => $request->price,
+                    'quantity' => $request->quantity,
+                    'user_id' => $request->user_id
+                ]
+            );
+            if ($request->hasFile('file')) {
+                $image = $request->file('file');
+                $file_name = 'item-'.time().'.'.$image->getClientOriginalExtension();
+                $file_path = $image->storeAs('items', $file_name);
+                $image = DB::table('images')->insertGetID(
+                    [
+                        'file_name' => $file_name,
+                        'file_path' => $file_path,
+                        'item_id' => $item
+                    ]
+                );
+            }
+            if ($image) {
+                return response()->json([
+                    'success' => true,
+                ], Response::HTTP_OK);
+            }
+        }
+        catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }        
     }
 }
