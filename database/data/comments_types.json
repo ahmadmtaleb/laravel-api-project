@@ -1,0 +1,18 @@
+{
+    "tp1":{
+        "id":1,
+        "type_name":"text"
+    },
+    "tp2":{
+        "id":2,
+        "type_name":"image"
+    },
+    "tp3":{
+        "id":3,
+        "type_name":"audio"
+    },
+    "tp4":{
+        "id":4,
+        "type_name":"video"
+    }
+}

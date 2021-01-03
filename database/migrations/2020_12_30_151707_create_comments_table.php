@@ -16,7 +16,7 @@ class CreateCommentsTable extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('text')->nullable();
-            $table->string('file_path');
+            $table->string('file_path')->nullable();
             
             $table->foreignId('user_id')
                     ->constrained('users')
