@@ -97,7 +97,7 @@ class CommentsController extends Controller
                     'message0'=>$validator0->errors()
                 ], Response::HTTP_INTERNAL_SERVER_ERROR); 
             }
-            if($request->comments_type_id === 1){ //text
+            if($request->comments_type_id == 1){ //text
                 $validator1 = Validator::make($request->all(), 
                     [
                     'text' => 'required|string|max:1000',
@@ -125,7 +125,7 @@ class CommentsController extends Controller
                 }
             }
             if ($request->hasFile('file')) {
-                if($request->comments_type_id === 2){ //image 
+                if($request->comments_type_id == 2){ //image 
                     $validator2 = Validator::make($request->all(), 
                     [
                         'file' => 'required|image|mimes:jpeg,png,jpg,svg|max:2048',
@@ -154,7 +154,7 @@ class CommentsController extends Controller
                         ], Response::HTTP_OK);
                     }
                 }
-                if($request->comments_type_id === 3){ //audio
+                if($request->comments_type_id == 3){ //audio
                     $validator3 = Validator::make($request->all(), 
                     [
                         'file' => 'required|audio|mimes:mpga,mp2,mp2a,mp3,m2a,m3a,wma,ram,m4a|max:2048',
@@ -183,7 +183,7 @@ class CommentsController extends Controller
                         ], Response::HTTP_OK);
                     }
                 }
-                if($request->comments_type_id === 4){ //video
+                if($request->comments_type_id == 4){ //video
                     $validator4 = Validator::make($request->all(), 
                     [
                         'file' => 'required|video|mimes:mimes:3gp,mp4,mp4v,mpg4,mpeg,mpg,mpe,m1v,m2v|max:2048',
