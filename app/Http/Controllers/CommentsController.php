@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Gate;
+use App\Models\Comments;
+use Exception;
+use JWTAuth;
+use Validator;
 
 class CommentsController extends Controller
 {
@@ -75,21 +82,60 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
         try{
-            $validator = Validator::make($request->all(), 
-                    [ 
-                    'file' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
-                    ]);  
- 
-            if ($validator->fails()) {  
+            $validator0 = Validator::make($request->all(), 
+                    [
+                    'comments_type_id' => 'required',
+                    'item_id' => 'required',
+                    'user_id' => 'required|in:'.\Auth::user()->id,
+                    'file' => 'nullable',
+                    'text' => 'nullable'
+                    ]);
+            if ($validator0->fails()) {  
     
                 return response()->json([
                     'success' => false,
-                    'message'=>$validator->errors()
+                    'message0'=>$validator0->errors()
                 ], Response::HTTP_INTERNAL_SERVER_ERROR); 
-    
+            }
+            if($request->comments_type_id === 1){ //text
+                $validator1 = Validator::make($request->all(), 
+                    [
+                    'text' => 'required|string|max:1000',
+                    ]);  
+ 
+                if ($validator1->fails()) {  
+                    return response()->json([
+                        'success' => false,
+                        'message1'=>$validator1->errors()
+                    ], Response::HTTP_INTERNAL_SERVER_ERROR); 
+                }
+                $comment = DB::table('comments')->insertGetID(
+                    [
+                        'text' => $request->text,
+                        'item_id' => $request->item_id,
+                        'user_id' => $request->user_id,
+                        'comments_type_id' => $request->comments_type_id,
+                        // 'file_path' => null,
+                    ]
+                );
+                if ($comment) {
+                    return response()->json([
+                        'success' => true,
+                    ], Response::HTTP_OK);
+                }
             }
             if ($request->hasFile('file')) {
                 if($request->comments_type_id === 2){ //image 
+                    $validator2 = Validator::make($request->all(), 
+                    [
+                        'file' => 'required|image|mimes:jpeg,png,jpg,svg|max:2048',
+                    ]);  
+                    if ($validator2->fails()) {  
+                        return response()->json([
+                            'success' => false,
+                            'message2'=>$validator2->errors()
+                        ], Response::HTTP_INTERNAL_SERVER_ERROR); 
+                    }
                     $image = $request->file('file');
                     $file_name = 'comment-'.time().'.'.$image->getClientOriginalExtension();
                     $file_path = $image->storeAs('comments', $file_name);
@@ -98,7 +144,8 @@ class CommentsController extends Controller
                             'file_path' => $file_path,
                             'item_id' => $request->item_id,
                             'user_id' => $request->user_id,
-                            'comments_type_id' => $request->comments_type_id
+                            'comments_type_id' => $request->comments_type_id,
+                            // 'text' => null,
                         ]
                     );
                     if ($comment) {
@@ -107,26 +154,63 @@ class CommentsController extends Controller
                         ], Response::HTTP_OK);
                     }
                 }
-                elseif($request->comments_type_id === 3){ //audio
-
-                }
-                else{ //video
-
-                }
-            }
-            else{ //text
-                $comment = DB::table('comments')->insertGetID(
+                if($request->comments_type_id === 3){ //audio
+                    $validator3 = Validator::make($request->all(), 
                     [
-                        'text' => $request->text,
-                        'item_id' => $request->item_id,
-                        'user_id' => $request->user_id,
-                        'comments_type_id' => $request->comments_type_id
-                    ]
-                );
-                if ($comment) {
-                    return response()->json([
-                        'success' => true,
-                    ], Response::HTTP_OK);
+                        'file' => 'required|audio|mimes:mpga,mp2,mp2a,mp3,m2a,m3a,wma,ram,m4a|max:2048',
+                    ]);  
+                    if ($validator3->fails()) {  
+                        return response()->json([
+                            'success' => false,
+                            'message3'=>$validator3->errors()
+                        ], Response::HTTP_INTERNAL_SERVER_ERROR); 
+                    }
+                    $audio = $request->file('file');
+                    $file_name = 'comment-'.time().'.'.$audio->getClientOriginalExtension();
+                    $file_path = $audio->storeAs('comments', $file_name);
+                    $comment = DB::table('comments')->insertGetID(
+                        [
+                            'file_path' => $file_path,
+                            'item_id' => $request->item_id,
+                            'user_id' => $request->user_id,
+                            'comments_type_id' => $request->comments_type_id,
+                            // 'text' => null,
+                        ]
+                    );
+                    if ($comment) {
+                        return response()->json([
+                            'success' => true,
+                        ], Response::HTTP_OK);
+                    }
+                }
+                if($request->comments_type_id === 4){ //video
+                    $validator4 = Validator::make($request->all(), 
+                    [
+                        'file' => 'required|video|mimes:mimes:3gp,mp4,mp4v,mpg4,mpeg,mpg,mpe,m1v,m2v|max:2048',
+                    ]);  
+                    if ($validator4->fails()) {  
+                        return response()->json([
+                            'success' => false,
+                            'message4'=>$validator4->errors()
+                        ], Response::HTTP_INTERNAL_SERVER_ERROR); 
+                    }
+                    $video = $request->file('file');
+                    $file_name = 'comment-'.time().'.'.$video->getClientOriginalExtension();
+                    $file_path = $video->storeAs('comments', $file_name);
+                    $comment = DB::table('comments')->insertGetID(
+                        [
+                            'file_path' => $file_path,
+                            'item_id' => $request->item_id,
+                            'user_id' => $request->user_id,
+                            'comments_type_id' => $request->comments_type_id,
+                            // 'text' => null,
+                        ]
+                    );
+                    if ($comment) {
+                        return response()->json([
+                            'success' => true,
+                        ], Response::HTTP_OK);
+                    }
                 }
             }
         }
