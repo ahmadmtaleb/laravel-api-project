@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ImagesController;
+use App\Http\Controllers\CommentsController;
+
 
 
 
@@ -45,7 +47,11 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::put('images/edit/{id}', [ImagesController::class, 'update']);
     Route::delete('images/delete/{id}', [ImagesController::class, 'destroy']);
     
-    
+    Route::get('comments', [CommentsController::class, 'index']);
+    Route::get('comments/{id}', [CommentsController::class, 'show']);
+    Route::post('comments/create', [CommentsController::class, 'store']);
+    Route::put('comments/edit/{id}', [CommentsController::class, 'update']);
+    Route::delete('comments/delete/{id}', [CommentsController::class, 'destroy']);
 
 
 
